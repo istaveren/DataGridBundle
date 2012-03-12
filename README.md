@@ -17,14 +17,14 @@ The following documents are available:
 
 Abhoryo, golovanov, touchdesign, Spea, nurikabe, print, Gregory McLean, centove, lstrojny, Benedikt Wolters, Martin Parsiegla, evan and all bug reporters
 
-## Simple grid with ORM or ODM as source
+## Simple grid with Propel query or ORM or ODM as source
 
     // MyProject\MyBundle\DefaultController.php
     namespace MyProject\MyBundle\Controller;
 
     use Symfony\Component\HttpFoundation\RedirectResponse;
     use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+    use Sorien\DataGridBundle\Grid\Source\ModelSource;
     use Sorien\DataGridBundle\Grid\Source\Entity;
     use Sorien\DataGridBundle\Grid\Source\Document;
 
@@ -32,6 +32,9 @@ Abhoryo, golovanov, touchdesign, Spea, nurikabe, print, Gregory McLean, centove,
     {
         public function myGridAction()
         {
+            // Creates simple grid based on your entity (ORM)
+            $source = new ModelSource(new MyBookQuery());
+     
             // Creates simple grid based on your entity (ORM)
             $source = new Entity('MyProjectMyBundle:MyEntity');
 

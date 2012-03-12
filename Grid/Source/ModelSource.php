@@ -41,12 +41,13 @@ class ModelSource extends Source
   const COUNT_ALIAS = '__count';
 
   /**
-   * @param string $ModelName e.g Vendor\Bundle\Model\Book
+   * @param mixed $query e.g Vendor\Bundle\Model\BookQuery or Query object
    */
-  public function __construct($sourceName)
+  public function __construct(ModelCriteria $source)
   {
-    $this->class = $sourceName;
-    $this->joins = array();
+    
+    $this->class = $source->getModelName();
+    $this->query = $source;
   }
 
   public function initialise($container)
@@ -156,10 +157,7 @@ class ModelSource extends Source
    */
   public function execute($columns, $page = 0, $limit = 0)
   {
-    $strQueryClass = $this->class . "Query";
     $strPeerClass  = $this->class . "Peer";
-
-    $this->query = $strQueryClass::create();
 
     foreach ( $columns as $column )
     {
@@ -192,11 +190,6 @@ class ModelSource extends Source
           }
         }
       }
-    }
-
-    foreach ( $this->joins as $alias => $field )
-    {
-      $this->query->join($field, $alias);
     }
 
     if ( $page > 0 )

@@ -56,6 +56,11 @@ class Entity extends Source
      */
     private $joins;
 
+    /**
+     * set a query hint
+     */
+    private $hint;
+
     const TABLE_ALIAS = '_a';
     const COUNT_ALIAS = '__count';
 
@@ -220,7 +225,14 @@ class Entity extends Source
         //call overridden prepareQuery or associated closure
         $this->prepareQuery($this->query);
 
-        $items = $this->query->getQuery()->getResult();
+        $query = $this->query->getQuery();
+
+        if($this->hint)
+        {
+          $query->setHint( $this->hint['type'],$this->hint['class'] );
+        }
+
+        $items = $query->getResult();
 
         // hydrate result
         $result = new Rows();
@@ -330,5 +342,10 @@ class Entity extends Source
         }
 
         $this->manager->flush();
+    }
+
+    public function setHint($type, $class)
+    {
+      $this->hint = array('type' => $type, 'class' => $class);
     }
 }
